@@ -80,7 +80,7 @@ const Navbar = () => {
                                     user ?
                                         <div className='flex items-center gap-2 lg:gap-4'>
                                             <div className="dropdown dropdown-end">
-                                                <div tabIndex={0} role="button" className="w-10 h-10  btn-circle avatar border-2 border-blue-800 dark:border-blue-400 mt-1">
+                                                <div tabIndex={0} role="button" className="w-10 h-10  btn-circle avatar border-[1px] border-blue-800 dark:border-blue-400 mt-1">
                                                     <div className="w-full rounded-full ">
                                                         <img
                                                             referrerPolicy="no-referrer"

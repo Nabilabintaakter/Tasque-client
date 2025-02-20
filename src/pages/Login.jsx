@@ -35,7 +35,7 @@ const Login = () => {
                 toast.success('Successfully Logged in to your account!');
                 setTimeout(() => {
                     navigate(from);
-                }, 3000);
+                }, 1000);
             })
             .catch(() => {
                 setLoading(false);
@@ -51,7 +51,7 @@ const Login = () => {
                 toast.success('Successfully Logged in to your account!');
                 setTimeout(() => {
                     navigate(from);
-                }, 3000);
+                }, 1000);
             })
             .catch(() => {
                 setLoading(false);
