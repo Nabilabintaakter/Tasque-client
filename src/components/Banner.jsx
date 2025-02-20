@@ -10,12 +10,12 @@ const Banner = () => {
         >
             <Container>
                 <div className="relative flex flex-col w-full text-center text-white">
-                    <Fade direction="down" cascade>
+                    <Fade triggerOnce direction="down" cascade>
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
                             Organize, Track & Achieve Your Tasks
                         </h1>
                     </Fade>
-                    <Zoom>
+                    <Zoom triggerOnce>
                         <p className="mt-4 text-base md:text-xl opacity-90">
                             Simplify your workflow with Tasque - your ultimate task management solution.
                         </p>

@@ -38,7 +38,7 @@ const Navbar = () => {
 
     return (
         <div className="bg-transparent w-full">
-            <div className="fixed z-50 w-full">
+            <div className="fixed backdrop-blur-md z-50 w-full">
                 <Container>
                     <div className="navbar">
                         {/* Navbar Start */}
