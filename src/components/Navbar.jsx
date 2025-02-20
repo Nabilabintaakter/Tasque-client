@@ -6,6 +6,7 @@ import { Link, NavLink } from "react-router-dom";
 import Container from "../shared/Container";
 import logo from "../assets/tasque-logo.png";
 import logoText from "../assets/Tas-removebg-preview.png";
+import { CgMenuGridO } from "react-icons/cg";
 
 
 const Navbar = () => {
@@ -36,23 +37,23 @@ const Navbar = () => {
     );
 
     return (
-        <div className="bg-[#FEC140] w-full">
-            <div className="fixed backdrop-blur-md z-50 bg-[#FEC140]/80 w-full">
+        <div className="bg-transparent w-full">
+            <div className="fixed z-50 w-full">
                 <Container>
                     <div className="navbar">
                         {/* Navbar Start */}
                         <div className="navbar-start">
                             <div className="dropdown">
                                 <div tabIndex={0} role="button" className="mr-5 lg:hidden">
-                                    <ImMenu className="text-lg" />
+                                <CgMenuGridO className="text-2xl" />
                                 </div>
                                 <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-6 w-52 p-2 shadow">
                                     {links}
                                 </ul>
                             </div>
                             <div onClick={scrollToTop} className="flex items-center gap-1">
-                                <img className="w-7 md:w-8" src={logo} alt="" />
-                                <Link to={'/'}><img className="w-28 lg:w-32" src={logoText} alt="" /></Link>
+                                <img className="w-6 md:w-8" src={logo} alt="" />
+                                <Link to={'/'}><img className="w-32" src={logoText} alt="" /></Link>
                             </div>
                         </div>
 
