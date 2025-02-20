@@ -3,63 +3,54 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProf
 import { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import { auth } from "../../firebase/firebase.init";
-// import axios from "axios";
 
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null); // Initialize with null instead of undefined
     const [loading, setLoading] = useState(true);
-
 
     const createUser = (email, password) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     }
+
     const handleLogin = (email, password) => {
-        setLoading(true)
-        return signInWithEmailAndPassword(auth, email, password)
-    }
-    const handleSignOut = () => {
-        setLoading(true)
-        return signOut(auth)
-    }
-    const handleGoogleSignIn = () => {
-        setLoading(true)
-        return signInWithPopup(auth, googleProvider)
+        setLoading(true);
+        return signInWithEmailAndPassword(auth, email, password);
     }
 
-    // onAuthStateChange
+    const handleSignOut = () => {
+        setLoading(true);
+        return signOut(auth);
+    }
+
+    const handleGoogleSignIn = () => {
+        setLoading(true);
+        return signInWithPopup(auth, googleProvider);
+    }
+
+    // onAuthStateChanged
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async currentUser => {
-            if (currentUser?.email) {
-                setUser(currentUser)
-            //     const { data } = await axios.post(
-            //         `https://b10-a11-milescape-server.vercel.app/jwt`,
-            //         {
-            //             email: currentUser?.email,
-            //         },
-            //         { withCredentials: true }
-            //     )
-            // } else {
-            //     setUser(currentUser)
-            //     const { data } = await axios.get(
-            //         `https://b10-a11-milescape-server.vercel.app/logout`,
-            //         { withCredentials: true }
-            //     )
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {  // No need to check for email, currentUser is enough
+                setUser(currentUser);
+            } else {
+                setUser(null);  // Ensure user is set to null when not logged in
             }
-            setLoading(false)
-        })
-        return () => {
-            return unsubscribe()
-        }
-    }, [])
+            setLoading(false);
+        });
+
+        // Cleanup function
+        return () => unsubscribe();
+    }, []);
 
     const handleUpdateProfile = (name, photo) => {
-        setLoading(true)
+        setLoading(true);
         return updateProfile(auth.currentUser, {
             displayName: name, photoURL: photo
-        })
+        });
     }
+
     const authInfo = {
         user,
         setUser,
@@ -70,7 +61,8 @@ const AuthProvider = ({ children }) => {
         handleSignOut,
         handleLogin,
         handleGoogleSignIn
-    }
+    };
+
     return (
         <AuthContext.Provider value={authInfo}>
             {children}
