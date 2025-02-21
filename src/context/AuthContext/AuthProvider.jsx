@@ -3,11 +3,13 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProf
 import { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import { auth } from "../../firebase/firebase.init";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null); // Initialize with null instead of undefined
+    const [user, setUser] = useState(null); 
     const [loading, setLoading] = useState(true);
+    const axiosPublic = useAxiosPublic();
 
     const createUser = (email, password) => {
         setLoading(true);
@@ -29,20 +31,29 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider);
     }
 
-    // onAuthStateChanged
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            if (currentUser) {  // No need to check for email, currentUser is enough
-                setUser(currentUser);
-            } else {
-                setUser(null);  // Ensure user is set to null when not logged in
+        const unsubscribe = onAuthStateChanged(auth, currentUser => {
+            setUser(currentUser);
+            if (currentUser) {
+                // get token and store client
+                const userInfo = { email: currentUser.email };
+                axiosPublic.post('/jwt', userInfo)
+                    .then(res => {
+                        if (res.data.token) {
+                            localStorage.setItem('access-token', res.data.token);
+                            setLoading(false);
+                        }
+                    })
             }
-            setLoading(false);
+            else {
+                localStorage.removeItem('access-token');
+                setLoading(false);
+            }
         });
-
-        // Cleanup function
-        return () => unsubscribe();
-    }, []);
+        return () => {
+            return unsubscribe();
+        }
+    }, [axiosPublic])
 
     const handleUpdateProfile = (name, photo) => {
         setLoading(true);

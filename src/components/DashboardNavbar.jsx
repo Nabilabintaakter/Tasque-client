@@ -35,7 +35,7 @@ const DashboardNavbar = () => {
                     {/* Home Icon */}
                     <NavLink
                         to="/"
-                        title="Add Task"
+                        title="Home"
                         className={({ isActive }) =>
                             `bg-gray-200 dark:bg-[#3C3F47] px-2 py-[6px] rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive
                                 ? "bg-[#FEC140] text-gray-800"

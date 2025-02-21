@@ -75,10 +75,7 @@ const Register = () => {
             setUser(user);
             setLoading(false);
             toast.success("Successfully Registered!");
-
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
+            navigate('/');
 
         } catch (err) {
             setError(err.message);
@@ -101,9 +98,7 @@ const Register = () => {
                     }
                 )
                 toast.success('Successfully Logged in to your account!');
-                setTimeout(() => {
-                    navigate('/');
-                }, 1000);
+                navigate('/');
             })
             .catch(err => {
                 toast.error(err?.message)
@@ -121,7 +116,7 @@ const Register = () => {
 
                     {/* Register Form */}
                     <div className="w-full lg:w-1/3 flex justify-center items-center">
-                        <div className="card w-full shadow-xl" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
+                        <div className="card w-full shadow-xl max-w-md bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
                             <form onSubmit={handleRegister} className="card-body p-6">
                                 <div className="flex justify-center text-center">
                                     <Link to={'/'} className="flex items-center gap-1">

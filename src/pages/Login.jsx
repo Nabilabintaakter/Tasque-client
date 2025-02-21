@@ -47,9 +47,7 @@ const Login = () => {
                 setLoading(false);
                 setUser(res.user);
                 toast.success('Successfully Logged in to your account!');
-                setTimeout(() => {
-                    navigate(from);
-                }, 1000);
+                navigate(from);
             })
             .catch(() => {
                 setLoading(false);
@@ -71,9 +69,7 @@ const Login = () => {
                     }
                 )
                 toast.success('Successfully Logged in to your account!');
-                setTimeout(() => {
-                    navigate(from);
-                }, 1000);
+                navigate(from);
             })
             .catch(err => {
                 toast.error(err?.message)
@@ -92,7 +88,7 @@ const Login = () => {
 
                     {/* Login Form */}
                     <div className="w-full lg:w-1/3 flex justify-center items-center">
-                        <div className="card w-full p-6 shadow-xl max-w-md" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
+                        <div className="card w-full p-6 shadow-xl max-w-md bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div className="mb-4 flex justify-center text-center">
                                     <Link to={'/'} className="flex items-center gap-1">

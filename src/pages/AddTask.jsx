@@ -1,46 +1,47 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast"; // For notifications
-import useAuth from "../hooks/useAuth"; // Assuming you have an auth context
+import { toast } from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { ImSpinner3 } from "react-icons/im";
 
 const AddTask = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("To-Do");
     const navigate = useNavigate();
-    const { user } = useAuth(); // Get logged-in user
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+
+    // useMutation for adding a task
+    const { isPending, mutateAsync } = useMutation({
+        mutationFn: async (newTask) => {
+            await axiosSecure.post("/tasks", newTask);
+        }
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!title.trim()) {
             toast.error("Title is required!");
             return;
         }
-
         const newTask = {
             title,
             description,
             timestamp: new Date().toISOString(),
-            category: "To-Do", // Default category
-            userId: user?.uid, // Store userId for authentication
+            category,
+            user: user?.displayName,
+            email: user?.email,
+            userId: user?.uid,
         };
-
         try {
-            const response = await fetch("https://your-api-url.com/tasks", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newTask),
-            });
-
-            if (response.ok) {
-                toast.success("Task added successfully!");
-                navigate("/dashboard"); // Redirect to dashboard
-            } else {
-                toast.error("Failed to add task!");
-            }
-        } catch (error) {
-            console.error("Error adding task:", error);
-            toast.error("Something went wrong!");
+            await mutateAsync(newTask)
+            toast.success('Your task has been successfully added!');
+            navigate('/dashboard/manage-task')
+        } catch (err) {
+            toast.error(err.message)
         }
     };
 
@@ -82,12 +83,29 @@ const AddTask = () => {
                         ></textarea>
                     </div>
 
+                    {/* Category Dropdown */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Category
+                        </label>
+                        <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring focus:ring-yellow-300 dark:bg-gray-700 dark:text-white"
+                        >
+                            <option value="To-Do">To-Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </div>
+
                     {/* Submit Button */}
                     <button
                         type="submit"
                         className="w-full bg-[#FEC140] text-gray-900 font-semibold px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all"
+                        disabled={isPending} // Disable button when loading
                     >
-                        Add Task
+                        {isPending ? <div className="flex items-center justify-center"><p className="flex items-center gap-2">Adding <ImSpinner3 className="animate-spin" /></p></div> : "Add Task"}
                     </button>
                 </form>
             </div>

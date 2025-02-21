@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 
 import { Outlet } from "react-router-dom";
 import DashboardNavbar from "../components/DashboardNavbar";
+import { Toaster } from "react-hot-toast";
 
 
 const DashboardLayout = () => {
@@ -17,10 +18,11 @@ const DashboardLayout = () => {
 
         {/* Dynamic Content (Outlet) */}
         <div
-          className="h-[calc(100vh-56px)] bg-no-repeat bg-cover bg-center"
+          className="min-h-[calc(100vh-56px)] bg-no-repeat bg-cover bg-center"
           style={{ backgroundImage: "url('/Simple Shiny.svg')" }}
         >
           <Outlet />
+          <Toaster />
         </div>
       </div>
     </div>
