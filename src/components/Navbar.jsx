@@ -82,7 +82,7 @@ const Navbar = () => {
         <div className="bg-[#FEC140] w-full">
             <div className="fixed backdrop-blur-md z-50 bg-[#FEC140]/90 w-full">
                 <Container>
-                    <div className="navbar">
+                    <div className="navbar p-0">
                         {/* Navbar Start */}
                         <div className="navbar-start">
                             <div className="dropdown">
