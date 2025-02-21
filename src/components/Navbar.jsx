@@ -6,7 +6,7 @@ import logo from "../assets/tasque-logo.png";
 import logoText from "../assets/Tas-removebg-preview.png";
 import { CgMenuGridO } from "react-icons/cg";
 import AuthContext from "../context/AuthContext/AuthContext";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaInfoCircle, FaList, FaSignOutAlt, FaTachometerAlt } from "react-icons/fa";
 
 
 const Navbar = () => {
@@ -39,11 +39,44 @@ const Navbar = () => {
 
     const links = (
         <>
-            <li><NavLink onClick={scrollToTop} to={'/'}>Home</NavLink></li>
-            <li><NavLink to="/#products" >Features</NavLink></li>
-            <li><NavLink to="#footer">About Us</NavLink></li>
+            <li>
+                <NavLink 
+                    onClick={scrollToTop} 
+                    to="/" 
+                    className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
+                >
+                    <FaHome className="" /> Home
+                </NavLink>
+            </li>
+            <li>
+                <NavLink 
+                    to="/features" 
+                    className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
+                >
+                    <FaList className="" /> Features
+                </NavLink>
+            </li>
+            <li>
+                <NavLink 
+                    to="/about" 
+                    className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
+                >
+                    <FaInfoCircle className="" /> About Us
+                </NavLink>
+            </li>
+            {user && (
+                <li>
+                    <NavLink 
+                        to="/dashboard" 
+                        className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
+                    >
+                        <FaTachometerAlt className="" /> Dashboard
+                    </NavLink>
+                </li>
+            )}
         </>
     );
+    
 
     return (
         <div className="bg-[#FEC140] w-full">
@@ -56,7 +89,7 @@ const Navbar = () => {
                                 <div tabIndex={0} role="button" className="mr-5 lg:hidden">
                                     <CgMenuGridO className="text-2xl" />
                                 </div>
-                                <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-6 w-52 p-2 shadow">
+                                <ul tabIndex={0} className="menu menu-sm dropdown-content bg-[#FEC140] rounded-box z-10 mt-6 w-52 p-2 shadow">
                                     {links}
                                 </ul>
                             </div>
@@ -67,8 +100,8 @@ const Navbar = () => {
                         </div>
 
                         {/* Navbar Center */}
-                        <div className="navbar-center hidden lg:flex">
-                            <ul className="menu menu-horizontal px-1 text-black font-medium">
+                        <div className="navbar-center hidden lg:block">
+                            <ul className="menu menu-horizontal flex gap-2 px-1 text-black font-medium">
                                 {links}
                             </ul>
                         </div>
@@ -93,11 +126,11 @@ const Navbar = () => {
                                                     className="menu menu-sm dropdown-content bg-base-100 rounded z-[1] mt-3 w-52 p-2 shadow">
                                                     <li className='flex justify-center items-center text-xl text-black font-bold mb-2'>{user?.displayName}</li>
                                                     <li className='px-2 block  lg:hidden'>
-                                                        <button onClick={signOutHandler} className='bg-red-500  rounded border-[1px] border-red-500 shadow-none text-white font-medium w-full py-1 px-2 md:py-[6px] md:px-4 flex md:hidden justify-center items-center hover:bg-white hover:text-red-500 transition-all duration-300 gap-2'><FaSignOutAlt></FaSignOutAlt> Logout</button>
+                                                        <button onClick={signOutHandler} className='bg-red-600  rounded border-[1px] border-red-600 shadow-none text-white font-medium w-full py-1 px-2 md:py-[6px] md:px-4 flex md:hidden justify-center items-center hover:bg-white hover:text-red-600 transition-all duration-300 gap-2'><FaSignOutAlt></FaSignOutAlt> Logout</button>
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <button onClick={signOutHandler} className='bg-red-500  rounded border-[1px] border-red-500 shadow-none text-white font-medium py-1 px-2 md:py-[6px] md:px-4 hidden md:flex items-center hover:bg-white hover:text-red-500 transition-all duration-300 gap-2'><FaSignOutAlt></FaSignOutAlt> Logout</button>
+                                            <button onClick={signOutHandler} className='bg-red-600  rounded border-[1px] border-red-600 shadow-none text-white font-medium py-1 px-2 md:py-[6px] md:px-4 hidden md:flex items-center hover:bg-white hover:text-red-600 transition-all duration-300 gap-2'><FaSignOutAlt></FaSignOutAlt> Logout</button>
                                         </div>
                                         :
                                         <div className='flex items-center gap-2'>

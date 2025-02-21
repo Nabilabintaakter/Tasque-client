@@ -1,8 +1,12 @@
 import { FaRegListAlt, FaUserFriends, FaBell, FaChartPie } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
 import Container from "../shared/Container";
+import { useEffect } from "react";
 
 const Features = () => {
+        useEffect(() => {
+            document.title = 'Features | Tasque';
+        }, []);
     const features = [
         {
             icon: <FaRegListAlt className="text-4xl text-blue-700" />,
@@ -31,34 +35,35 @@ const Features = () => {
     ];
 
     return (
-        <section className="py-16 bg-white">
-            <Container>
-                <Fade triggerOnce direction="up" cascade>
-                    <div className="w-[95%] md:w-[70%] mx-auto max-w-2xl">
-                        <h2 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-4 md:mb-6">
-                            Optimize Your Productivity with Key Features
-                        </h2>
-                        <p className="md:text-lg text-center text-gray-600 mb-12">
-                            Discover the tools and techniques that can help you streamline your tasks and stay focused, so you can achieve more with less effort.
-                        </p>
+<section className="h-[calc(100vh-64px)] pt-8 bg-white overflow-hidden">
+    <Container>
+        <Fade triggerOnce cascade>
+            <div className="w-[95%] md:w-[70%] mx-auto max-w-2xl">
+                <h2 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-4 md:mb-6">
+                    Optimize Your Productivity with Key Features
+                </h2>
+                <p className="md:text-lg text-center text-gray-600 mb-12">
+                    Discover the tools and techniques that can help you streamline your tasks and stay focused, so you can achieve more with less effort.
+                </p>
+            </div>
+        </Fade>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            {features.map((feature, index) => (
+                <Fade key={index} direction="up" delay={index * 100}>
+                    <div className={`h-[240px] md:h-[250px] rounded-xl transition-transform duration-300 hover:shadow-lg ${feature.bgColor} flex flex-col  items-center p-4 md:p-8 min-h-[250px] transition-all duration-300 ease-in-out`}>
+                        <div className="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-4">
+                            {feature.icon}
+                        </div>
+                        <h3 className="text-lg font-semibold text-center text-gray-800">{feature.title}</h3>
+                        <p className="text-gray-600 text-center mt-2">{feature.description}</p>
                     </div>
                 </Fade>
+            ))}
+        </div>
+    </Container>
+</section>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                    {features.map((feature, index) => (
-                        <Fade key={index} direction="up" delay={index * 100}>
-                            <div className={`h-[240px] md:h-[250px] rounded-xl transition-transform duration-300 hover:shadow-lg ${feature.bgColor} flex flex-col  items-center p-4 md:p-8 min-h-[250px] transition-all duration-300 ease-in-out`}>
-                                <div className="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-4">
-                                    {feature.icon}
-                                </div>
-                                <h3 className="text-lg font-semibold text-center text-gray-800">{feature.title}</h3>
-                                <p className="text-gray-600 text-center mt-2">{feature.description}</p>
-                            </div>
-                        </Fade>
-                    ))}
-                </div>
-            </Container>
-        </section>
     );
 };
 
