@@ -15,7 +15,7 @@ const Sidebar = () => {
             })
     }
     return (
-        <div className="w-52 hidden lg:flex bg-gray-800 text-white min-h-screen flex-col">
+        <div className="w-52 hidden fixed z-50 lg:flex bg-gray-800 text-white min-h-screen flex-col">
             {/* Logo and Title */}
             <Link to={'/'} className="py-[14px] px-5 text-lg font-semibold text-[#FEC140] border-b border-gray-700">
                 <h1>Tasque Workspace</h1>

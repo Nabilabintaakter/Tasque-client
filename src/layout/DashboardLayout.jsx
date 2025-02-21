@@ -8,13 +8,13 @@ import { Toaster } from "react-hot-toast";
 
 const DashboardLayout = () => {
   return (
-    <div className="relative min-h-screen md:flex bg-white">
-      <Sidebar />
+    <div className="relative min-h-screen lg:flex bg-white">
+      <div className="w-52"><Sidebar /></div>
 
       {/* Right Side: Dashboard Dynamic Content */}
       <div className="flex-1">
         {/* Header */}
-        <DashboardNavbar></DashboardNavbar>
+        <div className="h-[52px] md:h-[56px]"><DashboardNavbar></DashboardNavbar></div>
 
         {/* Dynamic Content (Outlet) */}
         <div

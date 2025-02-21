@@ -47,7 +47,7 @@ const AddTask = () => {
 
     return (
         <div className="py-8 md:py-10">
-            <div className="w-[95%] md:w-[60%] lg:w-[70%] mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="w-[96%] md:w-[60%] lg:w-[70%] mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
                 <h2 className="text-2xl text-center font-semibold mb-4 text-gray-900 dark:text-white">
                     Add New Task
                 </h2>
