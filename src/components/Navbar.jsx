@@ -67,7 +67,7 @@ const Navbar = () => {
             {user && (
                 <li>
                     <NavLink 
-                        to="/dashboard" 
+                        to="/dashboard/manage-task" 
                         className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
                     >
                         <FaTachometerAlt className="" /> Dashboard
@@ -87,7 +87,7 @@ const Navbar = () => {
                         <div className="navbar-start">
                             <div className="dropdown">
                                 <div tabIndex={0} role="button" className="mr-5 lg:hidden">
-                                    <CgMenuGridO className="text-2xl" />
+                                    <CgMenuGridO className="text-[27px]" />
                                 </div>
                                 <ul tabIndex={0} className="menu menu-sm dropdown-content bg-[#FEC140] rounded-box z-10 mt-6 w-52 p-2 shadow">
                                     {links}

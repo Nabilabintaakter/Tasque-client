@@ -35,7 +35,7 @@ const Features = () => {
     ];
 
     return (
-<section className="h-[calc(100vh-64px)] pt-8 bg-white overflow-hidden">
+<section className="min-h-screen py-8 bg-white">
     <Container>
         <Fade triggerOnce cascade>
             <div className="w-[95%] md:w-[70%] mx-auto max-w-2xl">
@@ -50,7 +50,7 @@ const Features = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {features.map((feature, index) => (
-                <Fade key={index} direction="up" delay={index * 100}>
+                <Fade key={index} triggerOnce delay={index * 100}>
                     <div className={`h-[240px] md:h-[250px] rounded-xl transition-transform duration-300 hover:shadow-lg ${feature.bgColor} flex flex-col  items-center p-4 md:p-8 min-h-[250px] transition-all duration-300 ease-in-out`}>
                         <div className="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-4">
                             {feature.icon}

@@ -11,7 +11,7 @@ const LoadingSpinner = ({ smallHeight }) => {
       justify-center 
       items-center bg-white dark:bg-[#282834]`}
     >
-      <HashLoader size={100} color='#3AA2AC' />
+      <HashLoader size={20} color='#3AA2AC' />
     </div>
   )
 }

@@ -7,6 +7,10 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Features from "../components/Features";
 import DashboardLayout from "../layout/DashboardLayout";
+import AddTask from "../pages/AddTask";
+import ManageTask from "../pages/ManageTask";
+import Profile from "../pages/Profile";
+import PrivateRoute from "./PrivateRoute";
 
   const router = createBrowserRouter([
     {
@@ -19,7 +23,7 @@ import DashboardLayout from "../layout/DashboardLayout";
         },
         {
             path: 'features',
-            element: <Features></Features>
+            element: <PrivateRoute><Features></Features></PrivateRoute>
         },
         {
             path: 'login',
@@ -33,11 +37,20 @@ import DashboardLayout from "../layout/DashboardLayout";
     },
     {
       path:'/dashboard',
-      element: <DashboardLayout></DashboardLayout>,
+      element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
       children:[
         {
-          
-        }
+          path:'add-task',
+          element: <AddTask></AddTask>
+        },
+        {
+          path:'manage-task',
+          element: <ManageTask></ManageTask>
+        },
+        {
+          path:'profile',
+          element: <Profile></Profile>
+        },
       ]
     }
   ]);

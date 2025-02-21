@@ -110,7 +110,7 @@ const Register = () => {
             })
     };
     return (
-        <div className="bg-white dark:bg-[#1A1A1A] py-4 md:py-8 lg:py-12 flex items-center justify-center">
+        <div className="bg-white dark:bg-[#1A1A1A] min-h-screen py-4 md:py-8 lg:py-12 flex items-center justify-center">
             <Container>
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Left Image */}
@@ -121,12 +121,12 @@ const Register = () => {
                     {/* Register Form */}
                     <div className="w-full lg:w-1/3 flex justify-center items-center">
                         <div className="card w-full shadow-xl" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
-                            <form onSubmit={handleRegister} className="card-body">
+                            <form onSubmit={handleRegister} className="card-body p-6">
                                 <div className="flex justify-center text-center">
-                                    <div className="flex items-center gap-1">
+                                    <Link to={'/'} className="flex items-center gap-1">
                                         <img className="w-6 md:w-8" src={logo} alt="" />
                                         <img className="w-32" src={logoText} alt="" />
-                                    </div>
+                                    </Link>
                                 </div>
                                 <p className="text-center text-sm">Please Register to continue</p>
                                 <div className="form-control">
@@ -169,7 +169,7 @@ const Register = () => {
                             <div className="form-control">
                                 <button
                                     onClick={googleLoginHandler}
-                                    className="flex items-center justify-center gap-2 bg-red-500 text-white py-2 rounded-md text-sm font-semibold border-[1px] border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500 hover:font-bold transition-all duration-500 w-full"
+                                    className="flex items-center justify-center gap-2 bg-red-500 text-white py-2 rounded-full text-sm font-semibold border-[1px] border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500 hover:font-bold transition-all duration-500 w-full"
                                 >
                                     <FcGoogle className="text-xl" />
                                     Log in with Google

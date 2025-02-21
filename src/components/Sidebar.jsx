@@ -1,52 +1,74 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { MdAddTask, MdListAlt } from 'react-icons/md';
 import { IoMdPerson } from 'react-icons/io';
 import { RiLogoutCircleLine } from 'react-icons/ri';
+import useAuth from '../hooks/useAuth';
 
 const Sidebar = () => {
+    const { handleSignOut } = useAuth();
+    const navigate = useNavigate();
+
+    const signOutHandler = () => {
+        handleSignOut()
+            .then(() => {
+                navigate('/login')
+            })
+    }
     return (
-        <div className="w-64 bg-gray-800 text-white min-h-screen flex flex-col">
+        <div className="w-52 hidden lg:flex bg-gray-800 text-white min-h-screen flex-col">
             {/* Logo and Title */}
-            <Link to={'/'} className="py-3 px-5 text-lg font-semibold text-[#FEC140] border-b border-gray-700">
+            <Link to={'/'} className="py-[14px] px-5 text-lg font-semibold text-[#FEC140] border-b border-gray-700">
                 <h1>Tasque Workspace</h1>
             </Link>
 
             {/* Navigation Links */}
-            <nav className="flex-1 mt-[10px] px-3">
-                <ul className='space-y-2'>
+            <nav className="flex-1 mt-3 px-3">
+                <ul className="space-y-2">
                     <li>
-                        <Link 
-                            to="/dashboard" 
-                            className="flex items-center p-2 font-medium hover:bg-[#FEC140] hover:text-gray-800 transition duration-200 rounded-lg">
-                            <MdAddTask className="mr-3 text-xl" /> Add Task
-                        </Link>
+                        <NavLink
+                            to="/dashboard/add-task"
+                            className={({ isActive }) =>
+                                `flex items-center p-2 font-medium text-xs transition duration-200 rounded-sm ${isActive ? "bg-[#FEC140] text-gray-800" : "hover:bg-[#FEC140] hover:text-gray-800"
+                                }`
+                            }
+                        >
+                            <MdAddTask className="mr-3 text-sm" /> Add Task
+                        </NavLink>
                     </li>
                     <li>
-                        <Link 
-                            to="/tasks/todo" 
-                            className="flex items-center p-2 font-medium hover:bg-[#FEC140] hover:text-gray-800 transition duration-200 rounded-lg">
-                            <MdListAlt className="mr-3 text-xl" /> Manage Task
-                        </Link>
+                        <NavLink
+                            to="/dashboard/manage-task"
+                            className={({ isActive }) =>
+                                `flex items-center p-2 font-medium text-xs transition duration-200 rounded-sm ${isActive ? "bg-[#FEC140] text-gray-800" : "hover:bg-[#FEC140] hover:text-gray-800"
+                                }`
+                            }
+                        >
+                            <MdListAlt className="mr-3 text-sm" /> Manage Task
+                        </NavLink>
                     </li>
                     <li>
-                        <Link 
-                            to="/settings" 
-                            className="flex items-center p-2 font-medium hover:bg-[#FEC140] hover:text-gray-800 transition duration-200 rounded-lg">
-                            <IoMdPerson className="mr-3 text-xl" /> Profile
-                        </Link>
-                    </li>
-                    <li>
-                        <button 
-                            className="flex items-center w-full p-2 font-medium text-left hover:bg-[#FEC140] hover:text-gray-800 transition duration-200 rounded-lg">
-                            <RiLogoutCircleLine className="mr-3 text-xl" /> Logout
-                        </button>
+                        <NavLink
+                            to="/dashboard/profile"
+                            className={({ isActive }) =>
+                                `flex items-center p-2 font-medium text-xs transition duration-200 rounded-sm ${isActive ? "bg-[#FEC140] text-gray-800" : "hover:bg-[#FEC140] hover:text-gray-800"
+                                }`
+                            }
+                        >
+                            <IoMdPerson className="mr-3 text-sm" /> Profile
+                        </NavLink>
                     </li>
                 </ul>
             </nav>
 
             {/* Footer or any additional info */}
-            <div className="py-4 text-center text-sm text-gray-400 border-t border-gray-700">
-                <p>&copy; 2025 Tasque Workspace. All rights reserved.</p>
+            <div className='border-t border-gray-700 px-3 pt-4'>
+                <button onClick={signOutHandler}
+                    className="flex items-center justify-center cursor-pointer w-full text-white p-2 font-medium text-left bg-red-500 hover:bg-red-600 text-xs transition duration-200 rounded-sm">
+                    <RiLogoutCircleLine className="mr-2 text-sm" /> Logout
+                </button>
+                <div className="py-4 text-center text-xs text-gray-400 ">
+                    <p>&copy; 2025 Tasque Workspace. All rights reserved.</p>
+                </div>
             </div>
         </div>
     );
