@@ -1,27 +1,41 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {useEffect, useRef, useState } from "react";
 import pic1 from '../assets/Login-bro.png';
 import pic2 from '../assets/Login-cuate.png';
 import { FcGoogle } from "react-icons/fc";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import toast from "react-hot-toast";
-import AuthContext from "../context/AuthContext/AuthContext";
 import logo from "../assets/tasque-logo.png";
 import logoText from "../assets/Tas-removebg-preview.png";
 import Container from "../shared/Container";
+import useAuth from "../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
     const location = useLocation();
     const from = location.state || '/';
     const emailRef = useRef();
-    const { handleLogin, setUser, handleGoogleSignIn, setLoading } = useContext(AuthContext);
+    const { handleLogin, setUser, handleGoogleSignIn, setLoading } = useAuth();
 
     useEffect(() => {
         document.title = 'Login | Tasque';
     }, []);
-
+    const { mutateAsync } = useMutation({
+        mutationFn: async userData => {
+            await axiosPublic.post(`/users`, userData)
+        },
+        onSuccess: () => {
+            console.log('user data saved')
+            // queryClient.invalidateQueries({ queryKey: ['classes'] })
+        },
+        onError: err => {
+            console.log(err.message)
+        },
+    })
     const handleSubmit = e => {
         e.preventDefault();
 
@@ -43,21 +57,27 @@ const Login = () => {
                 setUser(null);
             });
     };
-
+// handle google sign in
     const googleLoginHandler = () => {
         handleGoogleSignIn()
             .then(res => {
                 setUser(res.user);
+                mutateAsync(
+                    {
+                        name: res?.user?.displayName,
+                        email: res?.user?.email,
+                        image: res?.user?.photoURL
+                    }
+                )
                 toast.success('Successfully Logged in to your account!');
                 setTimeout(() => {
                     navigate(from);
                 }, 1000);
             })
-            .catch(() => {
-                setLoading(false);
-                toast.error('Please verify that your email and password are entered correctly.');
-                setUser(null);
-            });
+            .catch(err => {
+                toast.error(err?.message)
+                setUser(null)
+            })
     };
 
     return (
@@ -130,12 +150,12 @@ const Login = () => {
                             </div>
                             <p className="text-center mt-4 text-gray-600 text-sm">
                                 New to Tasque? Please
-                                <NavLink
+                                <Link
                                     to="/register"
                                     className="text-blue-600 ml-1 text-sm font-semibold hover:underline"
                                 >
                                     Register
-                                </NavLink>
+                                </Link>
                             </p>
                         </div>
                     </div>

@@ -1,23 +1,40 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext/AuthContext";
 import toast from "react-hot-toast";
 import pic1 from '../assets/Mobile login-pana.png';
 import pic2 from '../assets/Usability testing-pana.png';
 import Container from "../shared/Container";
-
+import logo from "../assets/tasque-logo.png";
+import logoText from "../assets/Tas-removebg-preview.png";
+import useAuth from "../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { FcGoogle } from "react-icons/fc";
 
 const Register = () => {
     const [error, setError] = useState('');
+    const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
-    const { createUser, handleUpdateProfile, setUser, setLoading } = useContext(AuthContext);
+    const { createUser, handleUpdateProfile,handleGoogleSignIn, setUser, setLoading } = useAuth();
     useEffect(() => {
-        document.title = 'Register |Milescape';
+        document.title = 'Register | Tasque';
     }, [])
-
-    const handleRegister = e => {
-        setError('');
+    const { mutateAsync } = useMutation({
+        mutationFn: async userData => {
+            await axiosPublic.post(`/users`, userData)
+        },
+        onSuccess: () => {
+            console.log('user data saved')
+            // queryClient.invalidateQueries({ queryKey: ['classes'] })
+        },
+        onError: err => {
+            console.log(err.message)
+        },
+    })
+    const handleRegister = async (e) => {
         e.preventDefault();
+        setError('');
+
         const form = e.target;
         const name = form.name.value;
         const photo = form.photo.value;
@@ -37,36 +54,61 @@ const Register = () => {
             setError("Password must contain at least one uppercase letter!");
             return;
         }
-
         if (password !== conPassword) {
-            setError("password didn't match")
+            setError("Passwords didn't match!");
             return;
         }
-        // const newUser = { name, photo, email, password, conPassword };
 
-        createUser(email, password)
+        try {
+            // Create User
+            const res = await createUser(email, password);
+            const user = res.user;
+
+            // Update Profile
+            await handleUpdateProfile(name, photo);
+
+            // Save user data in DB
+            const userData = { name, email, photo };
+            await mutateAsync(userData);
+
+            // Set user & navigate
+            setUser(user);
+            setLoading(false);
+            toast.success("Successfully Registered!");
+
+            setTimeout(() => {
+                navigate('/');
+            }, 1000);
+
+        } catch (err) {
+            setError(err.message);
+            toast.error(err.message);
+            setUser(null);
+            setLoading(false);
+        }
+    };
+    // handle google sign in
+    const googleLoginHandler = () => {
+        handleGoogleSignIn()
             .then(res => {
                 setUser(res.user);
-                setLoading(false);
-                // update profile
-                handleUpdateProfile(name, photo)
-                    .then(() => {
-                        setLoading(false);
-                        toast.success('Successfully Registered!')
-                        setTimeout(() => {
-                            navigate('/');
-                        }, 1000);
-                    })
-                    .catch((err) => {
-                        toast.error(err.message.slice(10))
-                        setUser(null);
-                    });
+                mutateAsync(
+                    {
+                        name: res?.user?.displayName,
+                        email: res?.user?.email,
+                        image: res?.user?.photoURL
+                    }
+                )
+                toast.success('Successfully Logged in to your account!');
+                setTimeout(() => {
+                    navigate('/');
+                }, 1000);
             })
-            .catch((err) => {
-                toast.error(err.message.slice(10))
-                setUser(null);
-            });
-    }
+            .catch(err => {
+                toast.error(err?.message)
+                setUser(null)
+            })
+    };
     return (
         <div className="bg-white dark:bg-[#1A1A1A] py-4 md:py-8 lg:py-12 flex items-center justify-center">
             <Container>
@@ -79,48 +121,64 @@ const Register = () => {
                     {/* Register Form */}
                     <div className="w-full lg:w-1/3 flex justify-center items-center">
                         <div className="card w-full shadow-xl" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
-                        <form onSubmit={handleRegister} className="card-body">
-                            <h1 className="text-4xl font-bold mb-5 flex justify-center">Register now!</h1>
+                            <form onSubmit={handleRegister} className="card-body">
+                                <div className="flex justify-center text-center">
+                                    <div className="flex items-center gap-1">
+                                        <img className="w-6 md:w-8" src={logo} alt="" />
+                                        <img className="w-32" src={logoText} alt="" />
+                                    </div>
+                                </div>
+                                <p className="text-center text-sm">Please Register to continue</p>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="font-bold">Name</span>
+                                    </label>
+                                    <input type="text" placeholder="name*" name="name" className="input border-none w-full" required />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="font-bold">Photo URL</span>
+                                    </label>
+                                    <input type="url" placeholder="photo url*" name="photo" className="input border-none w-full" required />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="font-bold">Email</span>
+                                    </label>
+                                    <input type="email" placeholder="email*" name="email" className="input border-none w-full" required />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="font-bold">Password</span>
+                                    </label>
+                                    <input type="password" placeholder="password*" name="password" className="input border-none w-full" required />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="font-bold">Confirm Password</span>
+                                    </label>
+                                    <input type="password" placeholder="confirm password*" name="conPassword" className="input border-none w-full" required />
+                                </div>
+                                {
+                                    error && <p className="text-red-500">{error}</p>
+                                }
+                                <div className="form-control mt-6">
+                                    <button className="btn btn-primary w-full">Register</button>
+                                </div>
+                                <div className="divider text-gray-600 text-sm">Or</div>
                             <div className="form-control">
-                                <label className="label">
-                                    <span className="font-bold">Name</span>
+                                <button
+                                    onClick={googleLoginHandler}
+                                    className="flex items-center justify-center gap-2 bg-red-500 text-white py-2 rounded-md text-sm font-semibold border-[1px] border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500 hover:font-bold transition-all duration-500 w-full"
+                                >
+                                    <FcGoogle className="text-xl" />
+                                    Log in with Google
+                                </button>
+                            </div>
+                                <label className="label flex justify-center mt-3">
+                                    <button href="#" className=" ">Already have an account? Please <Link to='/login' className="text-blue-600 ml-1 text-sm font-semibold hover:underline"> Login</Link></button>
                                 </label>
-                                <input type="text" placeholder="name*" name="name" className="input border-none w-full" required />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="font-bold">Photo URL</span>
-                                </label>
-                                <input type="url" placeholder="photo url*" name="photo" className="input border-none w-full" required />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="font-bold">Email</span>
-                                </label>
-                                <input type="email" placeholder="email*" name="email" className="input border-none w-full" required />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="font-bold">Password</span>
-                                </label>
-                                <input type="password" placeholder="password*" name="password" className="input border-none w-full" required />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="font-bold">Confirm Password</span>
-                                </label>
-                                <input type="password" placeholder="confirm password*" name="conPassword" className="input border-none w-full" required />
-                            </div>
-                            {
-                                error && <p className="text-red-500">{error}</p>
-                            }
-                            <div className="form-control mt-6">
-                                <button className="btn btn-primary w-full">Register</button>
-                            </div>
-                            <label className="label flex justify-center">
-                                <button href="#" className="font-bold ">Already have an account? Please <Link to='/login' className="text-blue-600 ml-1 text-xl font-semibold hover:underline "> Login</Link></button>
-                            </label>
-                        </form>
+                            </form>
                         </div>
                     </div>
 
