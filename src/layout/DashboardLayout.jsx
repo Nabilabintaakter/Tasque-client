@@ -16,7 +16,10 @@ const DashboardLayout = () => {
         <DashboardNavbar></DashboardNavbar>
 
         {/* Dynamic Content (Outlet) */}
-        <div>
+        <div
+          className="h-[calc(100vh-56px)] bg-no-repeat bg-cover bg-center"
+          style={{ backgroundImage: "url('/Simple Shiny.svg')" }}
+        >
           <Outlet />
         </div>
       </div>

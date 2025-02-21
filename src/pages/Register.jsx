@@ -63,12 +63,12 @@ const Register = () => {
             // Create User
             const res = await createUser(email, password);
             const user = res.user;
-
+            console.log(user.uid);
+            const userId = user.uid;
             // Update Profile
             await handleUpdateProfile(name, photo);
-
             // Save user data in DB
-            const userData = { name, email, photo };
+            const userData = { name, email, photo, userId };
             await mutateAsync(userData);
 
             // Set user & navigate
@@ -96,7 +96,8 @@ const Register = () => {
                     {
                         name: res?.user?.displayName,
                         email: res?.user?.email,
-                        image: res?.user?.photoURL
+                        image: res?.user?.photoURL,
+                        userId: res?.user?.uid
                     }
                 )
                 toast.success('Successfully Logged in to your account!');

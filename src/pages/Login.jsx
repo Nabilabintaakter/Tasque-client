@@ -66,7 +66,8 @@ const Login = () => {
                     {
                         name: res?.user?.displayName,
                         email: res?.user?.email,
-                        image: res?.user?.photoURL
+                        image: res?.user?.photoURL,
+                        userId: res?.user?.uid
                     }
                 )
                 toast.success('Successfully Logged in to your account!');

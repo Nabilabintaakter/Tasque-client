@@ -19,7 +19,7 @@ const DashboardNavbar = () => {
     };
 
     return (
-        <div className="bg-gray-800 text-white dark:bg-[#282834] px-5 md:px-4  py-2 w-full">
+        <div className="bg-gray-800 text-white dark:bg-[#282834] px-5 md:px-4 py-2 w-full">
 
             <div className="flex items-center justify-between">
                 {/* Left Side: Dashboard Title with Icon */}
