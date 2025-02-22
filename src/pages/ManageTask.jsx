@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import useAuth from "../hooks/useAuth";
 import LoadingSpinner from "../shared/LoadingSpinner";
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
@@ -7,6 +8,9 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import ConfirmModal from "../components/ConfirmModal";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { FcTodoList } from "react-icons/fc";
+import { MdFileDownloadDone, MdPendingActions } from "react-icons/md";
+import EditTaskModal from "../components/EditTaskModal";
 
 const ManageTasks = () => {
     const axiosSecure = useAxiosSecure();
@@ -25,28 +29,25 @@ const ManageTasks = () => {
         enabled: !!user?.email,
         refetchOnWindowFocus: false,
     });
-
-    // Delete Task Mutation with Toast
-    const deleteTaskMutation = useMutation({
-        mutationFn: async (taskId) => {
-            return await axiosSecure.delete(`/my-task/${taskId}`);
-        },
-        onSuccess: () => {
-            toast.success("Task deleted successfully");
-            refetch();
-        },
-        onError: (error) => {
-            toast.error(`Error: ${error.message}`);
-        }
+     // Delete Task Mutation with Toast
+   const deleteTaskMutation = useMutation({
+   mutationFn: async (taskId) => {
+     return await axiosSecure.delete(`/my-task/${taskId}`);
+   },
+    onSuccess: () => {
+     toast.success("Task deleted successfully");
+     refetch();
+   },
+    onError: (error) => {
+    toast.error(`Error: ${error.message}`);
+     }
     });
-
-    // Update Task Mutation with Toast
     const updateTaskMutation = useMutation({
         mutationFn: async (updatedTask) => {
             return await axiosSecure.patch(`/my-task/${updatedTask._id}`, updatedTask);
         },
         onSuccess: () => {
-            toast.success("Your task updated successfully");
+            toast.success("Task updated successfully");
             refetch();
             setEditModalOpen(false);
         },
@@ -55,30 +56,48 @@ const ManageTasks = () => {
         }
     });
 
-    // Handle Delete Click (Show Modal)
-    const handleDeleteClick = (task) => {
-        setSelectedTask(task);
-        setModalOpen(true);
-    };
+const handleDragEnd = (result) => {
+    if (!result.destination) return; // If dropped outside the droppable area, exit
+    
+    const { source, destination } = result;
+    
+    // Check if tasks belong to the same category or not
+    if (source.droppableId === destination.droppableId) {
+        const reorderedTasks = Array.from(tasks.filter(task => task.category === source.droppableId)); // Filter tasks from the same category
+        
+        const [movedTask] = reorderedTasks.splice(source.index, 1); // Remove the moved task
+        reorderedTasks.splice(destination.index, 0, movedTask); // Insert the task at the new position
 
-    // Handle Delete Confirmation
-    const handleConfirmDelete = () => {
-        setModalOpen(false);
-        if (selectedTask) {
-            toast.promise(
-                deleteTaskMutation.mutateAsync(selectedTask._id),
-            );
+        // Update the order for all tasks in this category
+        reorderedTasks.forEach((task, index) => {
+            task.order = index; // Update order for the tasks in this category
+        });
+
+        // Now update the task order in the backend for all tasks in the same category
+        reorderedTasks.forEach((task) => {
+            updateTaskMutation.mutate({
+                ...task,
+                order: task.order,             // Update order within the same category
+            });
+        });
+
+        // Refetch to get the latest task order from the backend
+        refetch();
+    } else {
+        // Handle task move between different categories
+        const movedTask = tasks.find(task => task._id === result.draggableId);
+        if (movedTask) {
+            updateTaskMutation.mutate({
+                ...movedTask,
+                category: destination.droppableId, // Move to the new category
+                order: destination.index,          // Set order based on new position
+            });
+
+            // Refetch to update tasks after moving between categories
+            refetch();
         }
-    };
-    // Handle Edit Click (Open Edit Modal)
-    const handleEditClick = (task) => {
-        setEditedTask({ ...task });
-        setEditModalOpen(true);
-    };
-    // Handle Update Task
-    const handleUpdateTask = () => {
-        updateTaskMutation.mutate(editedTask);
-    };
+    }
+};
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -95,117 +114,47 @@ const ManageTasks = () => {
         'Done': 'bg-gradient-to-br from-green-100 to-green-50',
     };
 
-    const groupedTasks = categories.reduce((acc, category) => {
-        acc[category] = tasks.filter(task => task.category === category);
-        return acc;
-    }, {});
-
     return (
-        <div className="px-2 py-2">
-            <div className="grid grid-cols-3 gap-1 md:gap-3">
+        <DragDropContext onDragEnd={handleDragEnd}>
+            <div className="px-2 py-2 grid grid-cols-3 gap-1 md:gap-3">
                 {categories.map((category) => (
-                    <div key={category} className={`${categoryColors[category]} min-h-screen rounded shadow-md p-2 md:p-3`}>
-                        <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">{category}</h3>
-                        <div className="space-y-2 md:space-y-3">
-                            {groupedTasks[category]?.length === 0 ? (
-                                <p className="text-xs md:text-base font-medium text-gray-800">No tasks in this category.</p>
-                            ) : (
-                                groupedTasks[category].map((task, index) => (
-                                    <Fade key={task._id} delay={index * 200} triggerOnce className="w-full">
-                                        <div className="bg-white rounded p-2 md:p-4 shadow-sm flex flex-col justify-between">
-                                            <div>
-                                                <h4 className="text-xs md:text-base font-medium text-gray-800">{task.title}</h4>
-                                                <p className="text-gray-600 text-[10px] md:text-sm mt-2">{task.description}</p>
-                                            </div>
-                                            <div className="mt-4 flex justify-end space-x-2">
-                                                <button className="text-blue-500 hover:text-blue-400 text-sm" onClick={() => handleEditClick(task)}>
-                                                    <FaEdit />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteClick(task)}
-                                                    className="text-red-500 hover:text-red-400 text-sm"
-                                                >
-                                                    <FaTrashAlt />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </Fade>
-                                ))
-                            )}
-                        </div>
-                    </div>
+                    <Droppable key={category} droppableId={category}>
+                        {(provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} className={`${categoryColors[category]} min-h-[calc(100vh-74px)] rounded shadow-md p-2 md:p-3`}>
+                                <div className="flex items-center gap-2 text-sm md:text-lg font-semibold text-gray-800 mb-4">
+                                    {category === 'To-Do' ? <FcTodoList className="text-blue-400 text-xl" /> : category === 'In Progress' ? <MdPendingActions className="text-yellow-600 text-xl" /> : <MdFileDownloadDone className="text-green-600 text-xl" />} {category}
+                                </div>
+                                <div className="space-y-3">
+                                    {tasks.filter(task => task.category === category).map((task, index) => (
+                                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                                            {(provided) => (
+                                                <Fade triggerOnce>
+                                                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="bg-white rounded p-1 md:p-4 shadow-sm flex flex-col justify-between">
+                                                        <h4 className="text-xs md:text-base font-medium text-gray-800">{index +1}.{task.title}</h4>
+                                                        <p className="text-gray-600 text-[10px] md:text-sm mt-2">{task.description}</p>
+                                                        <div className="mt-4 flex justify-end space-x-2">
+                                                            <button className="text-blue-500 hover:text-blue-400 text-sm" onClick={() => setEditedTask(task) || setEditModalOpen(true)}>
+                                                                <FaEdit />
+                                                            </button>
+                                                            <button className="text-red-500 hover:text-red-400 text-sm" onClick={() => setSelectedTask(task) || setModalOpen(true)}>
+                                                                <FaTrashAlt />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Fade>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            </div>
+                        )}
+                    </Droppable>
                 ))}
             </div>
-            {/* Delete Confirmation Modal */}
-            <ConfirmModal
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                onConfirm={handleConfirmDelete}
-                message="Are you sure you want to delete this task?"
-            />
-            {/* Edit Task Modal */}
-            {editModalOpen && (
-                <div className="px-2 md:px-0 fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center" >
-                    <div className="bg-white p-5 md:p-6 rounded-lg w-full max-w-md shadow-lg bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('/Simple Shiny.svg')" }}>
-                        <h2 className="text-lg md:text-2xl font-semibold mb-6 text-gray-800">Edit Your Task</h2>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 font-bold mb-2 text-sm md:text-base" htmlFor="title">
-                                Task Title
-                            </label>
-                            <input
-                                type="text"
-                                id="title"
-                                placeholder="Enter task title"
-                                value={editedTask.title}
-                                onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })}
-                                className="w-full p-3 text-gray-700 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs md:text-base border-none"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 font-bold mb-2 text-sm md:text-base" htmlFor="description">
-                                Description
-                            </label>
-                            <textarea
-                                id="description"
-                                placeholder="Enter task details (optional)"
-                                value={editedTask.description}
-                                onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })}
-                                className="w-full p-3 text-gray-700 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs md:text-base border-none"
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label className="block text-gray-700 font-bold mb-2 text-sm md:text-base" htmlFor="category">
-                                Category
-                            </label>
-                            <select
-                                id="category"
-                                value={editedTask.category}
-                                onChange={(e) => setEditedTask({ ...editedTask, category: e.target.value })}
-                                className="w-full p-3 text-gray-700 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs md:text-base border-none"
-                            >
-                                <option value="To-Do">To-Do</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Done">Done</option>
-                            </select>
-                        </div>
-                        <div className="flex justify-between space-x-2 md:space-x-4">
-                            <button
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 md:px-6 md:py-3 rounded-md font-semibold transition-colors duration-300 w-full text-sm md:text-base"
-                                onClick={() => setEditModalOpen(false)}
-                            >
-                                Close
-                            </button>
-                            <button
-                                className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 md:px-6 md:py-3 rounded-md font-semibold transition-colors duration-300 text-sm md:text-base w-full"
-                                onClick={handleUpdateTask}
-                            >
-                                Update Task
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+            <ConfirmModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onConfirm={() => setModalOpen(false) || deleteTaskMutation.mutate(selectedTask._id)} message="Are you sure you want to delete this task?" />
+            <EditTaskModal isOpen={editModalOpen} onClose={() => setEditModalOpen(false)} task={editedTask} setTask={setEditedTask} handleUpdateTask={() => updateTaskMutation.mutate(editedTask)} />
+        </DragDropContext>
     );
 };
 

@@ -2,16 +2,14 @@ import { Link } from "react-router-dom";
 import Container from "../shared/Container";
 import { Fade, Zoom } from "react-awesome-reveal";
 import { useEffect } from "react";
-import useAuth from "../hooks/useAuth";
 
 const Banner = () => {
-    const { user } = useAuth();
     useEffect(() => {
         document.title = 'Home | Tasque';
     }, []);
     return (
         <section
-            className={`flex w-full justify-center items-center bg-cover bg-center bg-no-repeat relative ${user ? 'h-[calc(100vh-64px)]' : 'h-[100vh]'}`}
+            className={`flex w-full justify-center items-center bg-cover bg-center bg-no-repeat relative h-[100vh]`}
             style={{ backgroundImage: "url('/Simple Shiny.svg')" }}
         >
 

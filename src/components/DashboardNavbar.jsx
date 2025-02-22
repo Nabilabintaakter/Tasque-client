@@ -37,23 +37,20 @@ const DashboardNavbar = () => {
                         to="/"
                         title="Home"
                         className={({ isActive }) =>
-                            `bg-gray-200 dark:bg-[#3C3F47] px-2 py-[6px] rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive
-                                ? "bg-[#FEC140] text-gray-800"
-                                : "hover:bg-[#FEC140] hover:text-gray-800"
-                            } ${isActive ? 'isActive' : ''}`
+                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? " bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
                         }
                     >
-                        <FaHome className="text-lg text-gray-600 dark:text-white" />
+                        <FaHome className="text-lg text-gray-600" />
                     </NavLink>
                     {/* Add Task icon */}
                     <NavLink
                         to="/dashboard/add-task"
                         title="Add Task"
                         className={({ isActive }) =>
-                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? " dark:bg-[#3C3F47]  bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
+                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? " bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
                         }
                     >
-                        <MdAddTask className="text-lg text-gray-600 dark:text-white" />
+                        <MdAddTask className="text-lg text-gray-600 " />
                     </NavLink>
 
 
@@ -62,10 +59,10 @@ const DashboardNavbar = () => {
                         to="/dashboard/manage-task"
                         title="Manage Tasks"
                         className={({ isActive }) =>
-                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? " dark:bg-[#3C3F47]  bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
+                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? "bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
                         }
                     >
-                        <MdOutlineTask className="text-lg text-gray-600 dark:text-white" />
+                        <MdOutlineTask className="text-lg text-gray-600 " />
                     </NavLink>
 
                     {/* Profile Icon */}
@@ -73,10 +70,10 @@ const DashboardNavbar = () => {
                         to="/dashboard/profile"
                         title="Settings"
                         className={({ isActive }) =>
-                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? " dark:bg-[#3C3F47]  bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
+                            `px-2 py-[6px] lg:hidden block rounded-sm shadow-md cursor-pointer transition-all duration-300 ease-in-out ${isActive ? " bg-[#FEC140] text-gray-800" : "bg-gray-200 hover:bg-[#FEC140] hover:text-gray-800"}`
                         }
                     >
-                        <IoMdSettings className="text-lg text-gray-600 dark:text-white" />
+                        <IoMdSettings className="text-lg text-gray-600" />
                     </NavLink>
 
                     {/* Logout Icon */}
@@ -85,7 +82,7 @@ const DashboardNavbar = () => {
                         title="Logout"
                         className="bg-red-200 lg:bg-gray-200 dark:bg-[#3C3F47] px-2 py-[6px] rounded-sm shadow-md cursor-pointer transition-all duration-300  ease-in-out hover:bg-red-600 lg:hover:bg-red-500"
                     >
-                        <RiLogoutCircleLine className="text-lg text-red-600 lg:text-gray-600 dark:text-white hover:text-white" />
+                        <RiLogoutCircleLine className="text-lg text-red-600 lg:text-gray-600  hover:text-white" />
                     </div>
 
                     {/* User Avatar with Hover Tooltip */}
