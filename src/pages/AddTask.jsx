@@ -9,7 +9,6 @@ import { ImSpinner3 } from "react-icons/im";
 const AddTask = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [category, setCategory] = useState("To-Do");
     const navigate = useNavigate();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
@@ -31,7 +30,7 @@ const AddTask = () => {
             title,
             description,
             timestamp: new Date().toISOString(),
-            category,
+            category : "To-Do",
             user: user?.displayName,
             email: user?.email,
             userId: user?.uid,
@@ -81,22 +80,6 @@ const AddTask = () => {
                             className="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring focus:ring-yellow-300 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter task details (optional)"
                         ></textarea>
-                    </div>
-
-                    {/* Category Dropdown */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Category
-                        </label>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring focus:ring-yellow-300 dark:bg-gray-700 dark:text-white"
-                        >
-                            <option value="To-Do">To-Do</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Done">Done</option>
-                        </select>
                     </div>
 
                     {/* Submit Button */}
