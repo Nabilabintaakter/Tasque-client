@@ -11,6 +11,7 @@ import AddTask from "../pages/AddTask";
 import ManageTask from "../pages/ManageTask";
 import Profile from "../pages/Profile";
 import PrivateRoute from "./PrivateRoute";
+import AboutUs from "../pages/AboutUs";
 
   const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ import PrivateRoute from "./PrivateRoute";
         {
             path: 'features',
             element: <PrivateRoute><Features></Features></PrivateRoute>
+        },
+        {
+            path: 'aboutUs',
+            element: <PrivateRoute><AboutUs></AboutUs></PrivateRoute>
         },
         {
             path: 'login',

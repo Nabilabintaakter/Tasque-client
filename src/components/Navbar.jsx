@@ -58,7 +58,7 @@ const Navbar = () => {
             </li>
             <li>
                 <NavLink 
-                    to="/about" 
+                    to="/aboutUs" 
                     className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
                 >
                     <FaInfoCircle className="" /> About Us

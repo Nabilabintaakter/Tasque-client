@@ -124,7 +124,7 @@ const handleDragEnd = (result) => {
                                 <div className="flex items-center gap-2 text-sm md:text-lg font-semibold text-gray-800 mb-4">
                                     {category === 'To-Do' ? <FcTodoList className="text-blue-400 text-xl" /> : category === 'In Progress' ? <MdPendingActions className="text-yellow-600 text-xl" /> : <MdFileDownloadDone className="text-green-600 text-xl" />} {category}
                                 </div>
-                                <div className="space-y-3">
+                                <div className="space-y-1 md:space-y-3">
                                     {tasks.filter(task => task.category === category).map((task, index) => (
                                         <Draggable key={task._id} draggableId={task._id} index={index}>
                                             {(provided) => (
@@ -133,10 +133,10 @@ const handleDragEnd = (result) => {
                                                         <h4 className="text-xs md:text-base font-medium text-gray-800">{index +1}.{task.title}</h4>
                                                         <p className="text-gray-600 text-[10px] md:text-sm mt-2">{task.description}</p>
                                                         <div className="mt-4 flex justify-end space-x-2">
-                                                            <button className="text-blue-500 hover:text-blue-400 text-sm" onClick={() => setEditedTask(task) || setEditModalOpen(true)}>
+                                                            <button className="text-blue-500 hover:text-blue-400 text-sm " onClick={() => setEditedTask(task) || setEditModalOpen(true)}>
                                                                 <FaEdit />
                                                             </button>
-                                                            <button className="text-red-500 hover:text-red-400 text-sm" onClick={() => setSelectedTask(task) || setModalOpen(true)}>
+                                                            <button className="text-red-500 hover:text-red-400 text-xs" onClick={() => setSelectedTask(task) || setModalOpen(true)}>
                                                                 <FaTrashAlt />
                                                             </button>
                                                         </div>

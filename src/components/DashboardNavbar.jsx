@@ -19,12 +19,12 @@ const DashboardNavbar = () => {
     };
 
     return (
-        <div className="bg-gray-800 fixed z-50 lg:z-0 lg:static text-white dark:bg-[#282834] px-2 md:px-4 py-2 w-full">
+        <div className="bg-gray-800 fixed z-50 lg:z-0 lg:static text-white px-2 md:px-4 py-2 w-full">
 
             <div className="flex items-center justify-between">
                 {/* Left Side: Dashboard Title with Icon */}
                 <div className='flex items-center gap-2'>
-                    <FaTasks className='hidden md:block'/>
+                    <FaTasks className='hidden md:block' />
                     <p className="text-base dark:text-white font-medium">
                         My Tasque Board
                     </p>
@@ -80,11 +80,14 @@ const DashboardNavbar = () => {
                     <div
                         onClick={signOutHandler}
                         title="Logout"
-                        className="bg-red-200 lg:bg-gray-200 dark:bg-[#3C3F47] px-2 py-[6px] rounded-sm shadow-md cursor-pointer transition-all duration-300  ease-in-out hover:bg-red-600 lg:hover:bg-red-500"
+                        className="bg-red-200 lg:bg-gray-200 px-2 py-[6px] rounded-sm shadow-md cursor-pointer transition-all duration-300  ease-in-out hover:bg-red-600 lg:hover:bg-red-500 block lg:hidden"
                     >
                         <RiLogoutCircleLine className="text-lg text-red-600 lg:text-gray-600  hover:text-white" />
                     </div>
-
+                    <div className='text-white hidden md:block'>
+                        <h1 className='font-bold text-sm'>{user?.displayName}</h1>
+                        <p className='text-xs'>{user?.email}</p>
+                    </div>
                     {/* User Avatar with Hover Tooltip */}
                     <div
                         className="relative cursor-pointer"
@@ -99,10 +102,18 @@ const DashboardNavbar = () => {
 
                         {/* Tooltip for User Name */}
                         {showTooltip && user?.displayName && (
-                            <div className="absolute w-40 text-center px-5 py-3 top-[50px] font-medium right-1 bg-gray-800 text-[#FEC140] text-sm rounded-md shadow-lg">
+                            <div className="absolute block md:hidden w-40 text-center px-5 py-3 top-[50px] font-medium right-1 bg-gray-800 text-[#FEC140] text-sm rounded-md shadow-lg">
                                 {user.displayName}
                             </div>
                         )}
+                    </div>
+                                        {/* Logout Icon */}
+                                        <div
+                        onClick={signOutHandler}
+                        title="Logout"
+                        className="bg-red-200 lg:bg-gray-200 px-2 py-[6px] rounded-sm shadow-md cursor-pointer transition-all duration-300  ease-in-out hover:bg-red-600 lg:hover:bg-red-500 hidden lg:block"
+                    >
+                        <RiLogoutCircleLine className="text-lg text-red-600 lg:text-gray-600  hover:text-white" />
                     </div>
                 </div>
             </div>
