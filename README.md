@@ -1,8 +1,40 @@
-# React + Vite
+# Tasque - Task Management Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Short Description
+Tasque is a task management application that helps users organize their tasks by categories. The app allows users to add, edit, and delete tasks. It features drag-and-drop functionality to sort tasks within categories, and it also provides a modal for task details and deletion.
 
-Currently, two official plugins are available:
+## Live Link
+[Visit Tasque](https://tasque-task-management-system.web.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Dependencies
+- React
+- React Icons
+- hello-pangea/dnd
+- Fade In Animation (e.g., `react-reveal` or similar)
+- Tailwind CSS
+- Firebase
+  
+## Installation Steps
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/Nabilabintaakter/Tasque-client.git
+cd Tasque-client
+```
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
+
+### 3️⃣ Run the Development Server
+```bash
+npm start
+```
+The app should now be running at http://localhost:3000/.
+
+## Server Link
+[Visit Tasque Server](https://tasque-server.onrender.com/)
+
+## Repository Link
+- **Server Repository:** [Tasque Server](https://github.com/Nabilabintaakter/Tasque-server)
