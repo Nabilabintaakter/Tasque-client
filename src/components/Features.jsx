@@ -2,6 +2,7 @@ import { FaRegListAlt, FaClock, FaShieldAlt, FaTasks, FaMobileAlt, FaRegLightbul
 import { Fade } from "react-awesome-reveal";
 import Container from "../shared/Container";
 import { useEffect } from "react";
+import Footer from "./Footer";
 
 const Features = () => {
     useEffect(() => {
@@ -50,7 +51,8 @@ const Features = () => {
     ];
 
     return (
-        <section className="min-h-screen py-8 bg-white">
+        <>
+                <section className="min-h-screen py-8 bg-white">
             <Container>
                 <Fade triggerOnce cascade>
                     <div className="w-[95%] md:w-[70%] mx-auto max-w-2xl">
@@ -78,6 +80,8 @@ const Features = () => {
                 </div>
             </Container>
         </section>
+        <Footer></Footer>
+        </>
     );
 };
 

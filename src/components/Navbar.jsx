@@ -13,13 +13,23 @@ const Navbar = () => {
     const { user, handleSignOut } = useContext(AuthContext);
     const [isScrolled, setIsScrolled] = useState(false);
     const navigate = useNavigate();
+
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
         });
     };
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
 
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
     const signOutHandler = () => {
         handleSignOut()
             .then(() => {
@@ -40,43 +50,41 @@ const Navbar = () => {
     const links = (
         <>
             <li>
-                <NavLink 
-                    onClick={scrollToTop} 
-                    to="/" 
+                <NavLink
+                    onClick={scrollToTop}
+                    to="/"
                     className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
                 >
                     <FaHome className="" /> Home
                 </NavLink>
             </li>
             <li>
-                <NavLink 
-                    to="/features" 
+                <NavLink
+                    to="/features"
                     className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
                 >
                     <FaList className="" /> Features
                 </NavLink>
             </li>
             <li>
-                <NavLink 
-                    to="/aboutUs" 
+                <NavLink
+                    to="/dashboard/manage-task"
+                    className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
+                >
+                    <FaTachometerAlt className="" /> Dashboard
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="/aboutUs"
                     className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
                 >
                     <FaInfoCircle className="" /> About Us
                 </NavLink>
             </li>
-            {user && (
-                <li>
-                    <NavLink 
-                        to="/dashboard/manage-task" 
-                        className={({ isActive }) => isActive ? "bg-black text-white font-semibold" : ""}
-                    >
-                        <FaTachometerAlt className="" /> Dashboard
-                    </NavLink>
-                </li>
-            )}
         </>
     );
-    
+
 
     return (
         <div className="bg-[#FEC140] w-full">
